@@ -1,5 +1,4 @@
 import socket
-import sys
 import time
 import tkinter as tk
 import threading
@@ -21,27 +20,29 @@ def update_chat():
         check_for_ping()
 
 
-server = "irc.freenode.org"
-channel = "#chat"
-botnick = "nonerroneousnickname4523"
-password = ""
+server = "irc.libera.chat"
+channel = "#bot-test"
+nick = "nonerroneousname414132"
 
 print("connecting to: "+server)
 irc.connect((server, 6667))
-irc.send(("NICK " + botnick + "\n").encode())
+irc.send(("NICK " + nick + "\n").encode())
 check_for_ping()
-irc.send(("USER " + botnick + " 0 * :" + botnick + "\n").encode())
+irc.send(("USER " + nick + " 0 * :" + nick + "\n").encode())
 check_for_ping()
-time.sleep(5)
+time.sleep(8)
 irc.send(("JOIN " + channel + "\n").encode())
 
-textEnter = tk.Entry(window)
+textEnter = tk.Entry(window, width=24)
 textEnter.pack()
-button = tk.Button(window, bd=5, text="Send", command=lambda: irc.send(("PRIVMSG " + channel + " :" + textEnter.get() + "\r\n").encode()))
+textEnter.place(anchor='center', relx=0.5, rely=0.9)
+button = tk.Button(window, bd=5, text="Send", command=lambda: [irc.send(("PRIVMSG " + channel + " :" + textEnter.get() + "\r\n").encode()), textEnter.delete(0, 'end')])
 button.pack()
+button.place(anchor='center', relx=0.70, rely=0.9)
 
 window.update_idletasks()
 thread = threading.Thread(target=update_chat)
 thread.start()
-window.after(1, button.invoke)  # prevents needing to press button twice (bug?)
+window.after(200, button.invoke)  # prevents needing to press button twice (bug?)
+window.geometry("800x800")
 window.mainloop()
