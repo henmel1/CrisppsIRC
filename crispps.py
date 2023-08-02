@@ -2,11 +2,12 @@ import socket
 import time
 import tkinter as tk
 import threading
+import random
 
 server = "irc.libera.chat"
 port = 6667
 channel = "#bot-test"
-nick = "nonerroneousname414132"
+nick = "guestuser" + str(random.randrange(0, 99999, 1))
 live = True
 
 # create irc socket, main window and chat feed frame
@@ -29,6 +30,7 @@ def change_socket():
 
 
 def format_text(text):
+    n1 = -1  # avoid reference of n1 before assignment
     try:
         n1 = text.index('!')
         n2 = text.index('#')
@@ -36,9 +38,9 @@ def format_text(text):
         n2 = -1
     if n2 > -1:
         name = text[1:n1]
-        message = text[n2+len(channel)+2:]
+        message = text[n2 + len(channel) + 2:]
         if 'JOIN' in text[n1:n2]:
-            return name+' joined.'
+            return name + ' joined.'
         else:
             return name + ': ' + message
     elif '!' in text and 'QUIT' in text:
@@ -49,7 +51,7 @@ def format_text(text):
 
 def check_for_ping():
     text = irc.recv(2040)
-    text_box.insert(tk.END, "\n"+format_text(text.decode()))
+    text_box.insert(tk.END, "\n" + format_text(text.decode()))
     text_box.see("end")  # autoscroll to latest message
 
     if text.find('PING'.encode()) != -1:
@@ -73,7 +75,7 @@ thread = threading.Thread(target=update_chat)
 text_enter = tk.Entry(window)
 send_button = tk.Button(window, bd=5, text="Send", command=lambda: [
     irc.send(("PRIVMSG " + channel + " :" + text_enter.get() + "\r\n").encode()),
-    text_box.insert(tk.END, "\n"+nick+": "+text_enter.get()),
+    text_box.insert(tk.END, "\n" + nick + ": " + text_enter.get()),
     text_box.see("end"),
     text_enter.delete(0, 'end')])
 text_enter.bind("<Return>", (lambda event: send_button.invoke()))  # allows user to hit enter to send message
@@ -82,7 +84,7 @@ send_button.grid(row=1, column=1, sticky='w')
 
 
 def connect_to_channel(s, p, c, n):
-    text_box.insert(tk.END, "\nconnecting to: "+s)
+    text_box.insert(tk.END, "\nconnecting to: " + s)
     irc.connect((s, p))
     irc.send(("NICK " + n + "\n").encode())
     check_for_ping()
@@ -100,10 +102,10 @@ connect_to_channel(server, port, channel, nick)
 def open_settings():
     settings = tk.Tk()
     settings.title("Settings")
-    warning_label = tk.Label(settings, fg="#fc1900", text="*WARNING* Please only change values"+
-                                            "\nif you know what you are doing."+
-                                            "\nInvalid changes may result in a"+
-                                            "\nprogram failure.")
+    warning_label = tk.Label(settings, fg="#fc1900", text="*WARNING* Please only change values" +
+                                                          "\nif you know what you are doing." +
+                                                          "\nInvalid changes may result in a" +
+                                                          "\nprogram failure.")
     nick_entry = tk.Entry(settings)
     nick_label = tk.Label(settings, text="Nick: ")
     server_entry = tk.Entry(settings)
