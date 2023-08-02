@@ -3,12 +3,12 @@ import time
 import tkinter as tk
 import threading
 import random
+import sys
 
 server = "irc.libera.chat"
 port = 6667
 channel = "#bot-test"
 nick = "guestuser" + str(random.randrange(0, 99999, 1))
-live = True
 
 # create irc socket, main window and chat feed frame
 irc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -59,14 +59,8 @@ def check_for_ping():
 
 
 def update_chat():
-    while live:
+    while 1:
         check_for_ping()
-
-
-def set_live(t):
-    global live
-    live = t
-
 
 # create thread to update chat
 thread = threading.Thread(target=update_chat)
@@ -120,12 +114,10 @@ def open_settings():
         nick = nick_entry.get()
 
     apply_button = tk.Button(settings, bd=5, text="Apply", command=lambda: [
-        set_live(False),
         change_socket(),
         change_nick(),
         connect_to_channel(server_entry.get(), int(port_entry.get()), channel_entry.get(), nick_entry.get()),
-        settings.destroy(),
-        set_live(True)])
+        settings.destroy()])
     warning_label.grid(row=0, columnspan=2, sticky='ew')
     nick_label.grid(row=1, column=0)
     nick_entry.grid(row=1, column=1)
@@ -145,8 +137,9 @@ thread.start()
 settings_button = tk.Button(window, text="Settings", command=open_settings)
 settings_button.grid(row=1, column=2, sticky='w')
 
+
 # initialize and start main window
 window.update_idletasks()
-window.after(200, send_button.invoke)  # prevents needing to press button twice (bug?)
+window.after(200, send_button.invoke)  # prevents needing to press send button twice (bug?)
 window.title("CrisppsIRC")
 window.mainloop()
