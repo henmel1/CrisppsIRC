@@ -1,5 +1,5 @@
 # CrisppsIRC
-Clean and simple multi-platform IRC client.
+A clean, simple, multi-platform IRC client.
 
 # Project Description
 CrisppsIRC is a lightweight, simple, multi-platform IRC client programmed in Python using Tkinter for the UI. It is designed to be easy to use and configure, with a clean and intuitive interface.
