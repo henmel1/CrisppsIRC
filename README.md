@@ -5,7 +5,7 @@ A clean, simple, multi-platform IRC client.
 CrisppsIRC is a lightweight, simple, multi-platform IRC client programmed in Python using Tkinter for the UI. It is designed to be easy to use and configure, with a clean and intuitive interface.
 
 # Installation
-Download the latest version of CrisppsIRC for Mac (.app) or Windows (.exe) from the releases section, unzip, and run.
+Download the latest version of CrisppsIRC from the releases section, unzip, and run the version for your operating system (.app for Mac users and .exe for Windows users).
 
 # How to Use
 Run the unzipped application file, it will automatically connect you to the #bot-test channel on the irc.libera.chat server with a guest nickname. If you would like to change the server, channel or name, click the settings button in the bottom right corner and configure.
